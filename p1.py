@@ -1,6 +1,28 @@
 from scipy.sparse import *
 import numpy as np
-
+def p1_has_cycle(sets):
+  m=csr_matrix(sets)
+  while m.shape[0] > 1:
+    #print(m.todense())
+    #print(m.shape[0])
+    cond1=find(m.T[find(m[0]==1)[1][0]]==-1)[1]
+    #print(f"cond1: {cond1}")
+    cond2=find(m.T[find(m[0]==-1)[1][0]]==1)[1]
+    #print(cond2)
+    #print(np.intersect1d(rewireable, match).size)
+    if np.intersect1d(cond1, cond2).size != 0:
+      return True
+    elif cond1.size != 0:
+      v=vstack([m[0], m[cond1]])
+      #print(cond1)
+      toBeAppended2 = hstack([csr_matrix([[1]]*(v.shape[0]-1)), csr_matrix(identity(v.shape[0]-1))])*v
+      m=vstack([m, toBeAppended2])
+    m=m[1:]
+    #print(m.todense())
+    #print('-'*40)
+  return False
+'''
+#Older version:
 def p1_has_cycle(sets):
   m=csr_matrix(sets)
   n=m.shape[0]
@@ -25,3 +47,4 @@ def p1_has_cycle(sets):
     m=m[1:]
     n=m.shape[0]
     #print('-'*40)
+    '''
